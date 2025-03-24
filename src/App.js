@@ -10,12 +10,14 @@ import LoginPage from './Components/LoginPage';
 import Products from './Components/Products';
 import ShoppingCart from './Components/ShoppingCart';
 import UserAccount from './Components/UserAccount';
+import NavigationBar from './Components/NavigationBar';
 
 
 // App component is the main component of the application
 function App() {
   return (
     <Router>
+      <NavigationBar />
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/LoginPage" element={<LoginPage />} />
