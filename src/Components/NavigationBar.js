@@ -7,7 +7,7 @@ function NavigationBar() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
       <Container fluid>
-        <Navbar.Brand href="#">Orbis Mods</Navbar.Brand>
+        <Navbar.Brand href="/">Orbis Mods</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -18,7 +18,7 @@ function NavigationBar() {
             {/* All links to my .js pages accessable from the Nav Bar */}
             <Nav.Link as={Link} to ="/">Home</Nav.Link>
             <Nav.Link as={Link} to ="/Products">Products</Nav.Link>
-            <Nav.Link as={Link} to ="/ShoppingCart">Products</Nav.Link>
+            <Nav.Link as={Link} to ="/ShoppingCart">Shopping Cart</Nav.Link>
             <Nav.Link as={Link} to ="/Login">Login</Nav.Link>
             <Nav.Link as={Link} to ="/UserAccount">My Account</Nav.Link>
           </Nav>
