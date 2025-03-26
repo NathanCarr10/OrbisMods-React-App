@@ -14,7 +14,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard"); // Redirect after signup
+      navigate("/UserAccount"); // Redirect after signup
     } catch (err) {
       setError(err.message);
     }
@@ -24,7 +24,7 @@ const Signup = () => {
   const handleGoogleSignup = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/dashboard"); // Redirect after signup
+      navigate("/UserAccount"); // Redirect after signup
     } catch (err) {
       setError(err.message);
     }

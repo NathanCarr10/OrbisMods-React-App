@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard"); // Redirect after login
+      navigate("/UserAccount"); // Redirect after login
     } catch (err) {
       setError(err.message);
     }
@@ -24,7 +24,7 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/dashboard"); // Redirect after login
+      navigate("/UserAccount"); // Redirect after login
     } catch (err) {
       setError(err.message);
     }
