@@ -23,11 +23,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} exact />
         <Route path="/LoginPage" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/Signup" element={<Signup />} />
         <Route path="/UserAccount" element={<ProtectedRoute><h2>Welcome! <Logout /></h2></ProtectedRoute>} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/shopping-cart" element={<ShoppingCart />} />
-        <Route path="/user-account" element={<UserAccount />} />
+        <Route path="/Products" element={<Products />} />
+        <Route path="/ShoppingCart" element={<ShoppingCart />} />
+        <Route path="/UserAccount" element={<UserAccount />} />
       </Routes>
     </Router>
   );
