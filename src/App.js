@@ -13,7 +13,7 @@ import NavigationBar from './Components/NavigationBar';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
-  return user ? children : <Navigate to="/login" />;
+  return user ? children : <Navigate to="/UserAccount" />;
 };
 
 function App() {
@@ -22,9 +22,9 @@ function App() {
       <NavigationBar />
       <Routes>
         <Route path="/" element={<Homepage />} exact />
-        <Route path="/login" element={<Login />} />
+        <Route path="/LoginPage" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<ProtectedRoute><h2>Welcome! <Logout /></h2></ProtectedRoute>} />
+        <Route path="/UserAccount" element={<ProtectedRoute><h2>Welcome! <Logout /></h2></ProtectedRoute>} />
         <Route path="/products" element={<Products />} />
         <Route path="/shopping-cart" element={<ShoppingCart />} />
         <Route path="/user-account" element={<UserAccount />} />
