@@ -13,11 +13,6 @@ const Homepage = () => {
         <h2 style={{ color: '#fdd835', fontSize: '2rem' }}>50+</h2>
         <p style={{ marginTop: '-10px', marginBottom: '20px' }}>Watch Mod Experts</p>
 
-        {/* Avatar section – add images later*/}
-        {/* <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-          { <img src="C:\Users\joelj\OneDrive - Atlantic TU\YR3\Semester 2\Professional Practices IT\OrbisMods-React-App\public\OrbisLogo.JPG" alt="modder" width="50" style={{ borderRadius: '50%' }} /> }
-        </div>*/}
-
         <button style={{
           backgroundColor: '#fdd835',
           border: 'none',
