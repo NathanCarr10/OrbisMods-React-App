@@ -1,17 +1,30 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../firebase"; 
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
+  // Email/Password Login
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert("Logged in successfully!");
+      navigate("/dashboard"); // Redirect after login
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Google Login
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/dashboard"); // Redirect after login
     } catch (err) {
       setError(err.message);
     }
@@ -26,6 +39,7 @@ const Login = () => {
         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">Login</button>
       </form>
+      <button onClick={handleGoogleLogin}>Login with Google</button>
     </div>
   );
 };
