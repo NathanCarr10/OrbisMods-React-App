@@ -10,6 +10,7 @@ import Products from './Components/Products';
 import ShoppingCart from './Components/ShoppingCart';
 import UserAccount from './Components/UserAccount';
 import NavigationBar from './Components/NavigationBar';
+import OrderHistory from './Components/OrderHistory';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -28,6 +29,7 @@ function App() {
         <Route path="/Products" element={<Products />} />
         <Route path="/ShoppingCart" element={<ShoppingCart />} />
         <Route path="/UserAccount" element={<UserAccount />} />
+        <Route path="/OrderHistory" element={<OrderHistory />} />
       </Routes>
     </Router>
   );
