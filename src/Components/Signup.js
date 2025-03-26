@@ -1,17 +1,30 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
+  // Email/Password Signup
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      alert("Account created successfully!");
+      navigate("/dashboard"); // Redirect after signup
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Google Signup
+  const handleGoogleSignup = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/dashboard"); // Redirect after signup
     } catch (err) {
       setError(err.message);
     }
@@ -26,6 +39,7 @@ const Signup = () => {
         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">Sign Up</button>
       </form>
+      <button onClick={handleGoogleSignup}>Sign Up with Google</button>
     </div>
   );
 };
