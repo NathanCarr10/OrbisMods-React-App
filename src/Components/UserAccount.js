@@ -7,27 +7,27 @@ const UserAccount = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Listen for user authentication state changes
+  // Fetch user authentication state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
 
-    return () => unsubscribe(); // Cleanup the listener
+    return () => unsubscribe();
   }, []);
 
   // Logout function
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/LoginPage"); // Redirect to login page after logout
+      navigate("/LoginPage"); // Redirect to login page
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error("Logout Error:", error);
     }
   };
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <h2>User Account</h2>
 
       {user ? (
@@ -36,12 +36,14 @@ const UserAccount = () => {
           <p><strong>Email:</strong> {user.email}</p>
           <p><strong>User ID:</strong> {user.uid}</p>
 
-          {/* Link to Order History Page */}
+          {/* Order History Link */}
           <Link to="/OrderHistory">View Order History</Link>
 
           <br /><br />
           {/* Logout Button */}
-          <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleLogout} style={{ background: "red", color: "white", padding: "10px", border: "none", cursor: "pointer" }}>
+            Logout
+          </button>
         </div>
       ) : (
         <p>You are not logged in. <Link to="/LoginPage">Login here</Link></p>
