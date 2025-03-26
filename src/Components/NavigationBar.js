@@ -19,7 +19,7 @@ function NavigationBar() {
             <Nav.Link as={Link} to ="/">Home</Nav.Link>
             <Nav.Link as={Link} to ="/Products">Products</Nav.Link>
             <Nav.Link as={Link} to ="/ShoppingCart">Shopping Cart</Nav.Link>
-            <Nav.Link as={Link} to ="/Login">Login</Nav.Link>
+            <Nav.Link as={Link} to ="/LoginPage">Login</Nav.Link>
             <Nav.Link as={Link} to ="/Signup">Sign Up</Nav.Link>
             <Nav.Link as={Link} to ="/UserAccount">My Account</Nav.Link>
           </Nav>
