@@ -1,37 +1,36 @@
-// Importing necessary components from 'react-router-dom'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-
-// Importing Bootstrap CSS for styling the application
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// Importing various custom components used in the app
 import Homepage from './Components/Homepage';
 import Login from './Components/LoginPage';
 import Signup from './Components/Signup';
+import Logout from './Components/Logout';
+import { useAuth } from './Components/AuthContext';
 import Products from './Components/Products';
 import ShoppingCart from './Components/ShoppingCart';
 import UserAccount from './Components/UserAccount';
 import NavigationBar from './Components/NavigationBar';
 
+const ProtectedRoute = ({ children }) => {
+  const { user } = useAuth();
+  return user ? children : <Navigate to="/login" />;
+};
 
-// App component is the main component of the application
 function App() {
   return (
     <Router>
       <NavigationBar />
       <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/LoginPage" element={<Login />} />
-        <Route path="/Signup" element={<Signup />} />
-        <Route path="/Products" element={<Products />} />
-        <Route path="/ShoppingCart" element={<ShoppingCart/>} />
-        <Route path="/UserAccount" element={<UserAccount />} />
+        <Route path="/" element={<Homepage />} exact />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<ProtectedRoute><h2>Welcome! <Logout /></h2></ProtectedRoute>} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/shopping-cart" element={<ShoppingCart />} />
+        <Route path="/user-account" element={<UserAccount />} />
       </Routes>
     </Router>
   );
 }
 
-//Exporting App component
 export default App;
