@@ -25,10 +25,10 @@ const ShoppingCart = () => {
   // Calculate total price of items in the cart
   const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
 
-  // Temporary checkout handler (we’ll replace this later with Stripe)
+  // Temporary checkout handler
   const handleCheckout = () => {
     alert("Proceeding to checkout...");
-    // This is where we'll trigger Stripe checkout or show a form in the next step
+    
   };
 
   return (

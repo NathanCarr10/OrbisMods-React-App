@@ -12,6 +12,13 @@ import UserAccount from './Components/UserAccount';
 import NavigationBar from './Components/NavigationBar';
 import OrderHistory from './Components/OrderHistory';
 
+// ✅ Stripe Imports
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
 // Cart Context Setup
 export const CartContext = createContext();
 
@@ -61,7 +68,16 @@ function App() {
           />
 
           <Route path="/Products" element={<Products />} />
-          <Route path="/ShoppingCart" element={<ShoppingCart />} />
+
+          {/* ✅ Stripe-wrapped ShoppingCart Route */}
+          <Route
+            path="/ShoppingCart"
+            element={
+              <Elements stripe={stripePromise}>
+                <ShoppingCart />
+              </Elements>
+            }
+          />
 
           <Route
             path="/OrderHistory"
