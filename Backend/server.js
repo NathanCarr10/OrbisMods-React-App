@@ -1,5 +1,4 @@
-// Load environment variables
-require("dotenv").config();
+require("dotenv").config(); // Load .env first
 
 const express = require("express");
 const cors = require("cors");
@@ -9,38 +8,39 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Check if secret key is loaded properly
 if (!process.env.STRIPE_SECRET_KEY) {
-  console.error("STRIPE_SECRET_KEY is missing from .env file");
-  process.exit(1); // Exit the app if the key is missing
+  console.error(" STRIPE_SECRET_KEY not found in .env");
+  process.exit(1);
 }
 
-// Payment Intent Endpoint
 app.post("/create-payment-intent", async (req, res) => {
   const { items } = req.body;
 
-  // Basic total calculator
-  const totalAmount = items.reduce((sum, item) => {
-    const quantity = item.quantity || 1;
-    return sum + item.price * quantity;
-  }, 0);
-
   try {
+    const totalAmount = items.reduce((total, item) => {
+      const quantity = item.quantity || 1;
+      return total + item.price * quantity;
+    }, 0);
+
+    if (!totalAmount || isNaN(totalAmount)) {
+      return res.status(400).json({ error: "Invalid cart total." });
+    }
+
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(totalAmount * 100), // Stripe requires cents
-      currency: "euro",
-      automatic_payment_methods: { enabled: true }, // Supports Google Pay, Apple Pay, etc.
+      amount: Math.round(totalAmount * 100), // Convert to cents
+      currency: "usd",
+      automatic_payment_methods: { enabled: true }, // For Google/Apple Pay
     });
 
+    console.log("✅ PaymentIntent created:", paymentIntent.id);
     res.send({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
-    console.error("Stripe Error:", error);
-    res.status(500).json({ error: "Failed to create payment intent" });
+    console.error("Stripe error:", error);
+    res.status(500).json({ error: "Failed to create PaymentIntent." });
   }
 });
 
-// ✅ Start the server
 const PORT = 4242;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`Stripe server running at http://localhost:${PORT}`);
 });

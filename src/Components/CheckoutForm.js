@@ -1,15 +1,16 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
 import { getFirestore, addDoc, collection } from "firebase/firestore";
-import { useContext } from "react";
+import { auth } from "../firebase";
 import { CartContext } from "../App";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
+  const db = getFirestore();
+
   const { cartItems, setCartItems } = useContext(CartContext);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
@@ -20,41 +21,63 @@ const CheckoutForm = () => {
     if (!stripe || !elements) return;
 
     setProcessing(true);
+    setError(null);
 
-    // Step 1: Create PaymentIntent (backend API call)
-    const res = await fetch("http://localhost:4242/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: cartItems }),
-    });
+    try {
+      console.log("🟡 Sending cart to backend:", cartItems);
 
-    const { clientSecret } = await res.json();
+      const res = await fetch("http://localhost:4242/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: cartItems }),
+      });
 
-    // Step 2: Confirm Card Payment
-    const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardElement),
-      },
-    });
+      const data = await res.json();
+      console.log("🟢 Received from backend:", data);
 
-    if (result.error) {
-      setError(result.error.message);
-      setProcessing(false);
-    } else {
+      if (!data.clientSecret) {
+        throw new Error("clientSecret missing from backend response.");
+      }
+
+      // Step 2: Confirm card payment
+      const result = await stripe.confirmCardPayment(data.clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+        },
+      });
+
+      console.log("🔵 Stripe result:", result);
+
+      if (result.error) {
+        console.error("Stripe error:", result.error.message);
+        setError(result.error.message);
+        setProcessing(false);
+        return;
+      }
+
       if (result.paymentIntent.status === "succeeded") {
+        console.log("✅ Payment succeeded:", result.paymentIntent.id);
+
         // Step 3: Store order in Firebase
-        const db = getFirestore();
         await addDoc(collection(db, "orders"), {
-          userId: auth.currentUser.uid,
+          userId: auth.currentUser?.uid,
           items: cartItems,
           amount: result.paymentIntent.amount / 100,
           timestamp: new Date(),
         });
 
         setCartItems([]); // Clear cart
-        alert("Payment successful! Order saved.");
-        navigate("/OrderHistory");
+        alert("✅ Payment successful! Order saved.");
+        navigate("\OrderHistory.js"); // Redirect to order history
+      } else {
+        console.warn("⚠️ PaymentIntent status was not succeeded:", result.paymentIntent.status);
+        setError("Payment was not successful. Please try again.");
+        setProcessing(false);
       }
+    } catch (err) {
+      console.error("Checkout error:", err.message);
+      setError(err.message || "Something went wrong. Please try again.");
+      setProcessing(false);
     }
   };
 
@@ -83,5 +106,3 @@ const CheckoutForm = () => {
 };
 
 export default CheckoutForm;
-// This component handles the Stripe payment process and stores the order in Firebase
-// after a successful payment. It uses the Stripe API to create a PaymentIntent and confirm the card payment.
