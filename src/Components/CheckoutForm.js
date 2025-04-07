@@ -24,7 +24,7 @@ const CheckoutForm = () => {
     setError(null);
 
     try {
-      console.log("🟡 Sending cart to backend:", cartItems);
+      console.log("Sending cart to backend:", cartItems);
 
       const res = await fetch("http://localhost:4242/create-payment-intent", {
         method: "POST",
@@ -68,7 +68,7 @@ const CheckoutForm = () => {
 
         setCartItems([]); // Clear cart
         alert("✅ Payment successful! Order saved.");
-        navigate("\OrderHistory.js"); // Redirect to order history
+        navigate("/OrderHistory"); // Redirect to order history
       } else {
         console.warn("⚠️ PaymentIntent status was not succeeded:", result.paymentIntent.status);
         setError("Payment was not successful. Please try again.");
