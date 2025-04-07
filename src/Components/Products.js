@@ -1,10 +1,12 @@
 import { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { CartContext } from "../App";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
   const db = getFirestore();
 
   useEffect(() => {
@@ -23,6 +25,11 @@ const Products = () => {
 
     fetchProducts();
   }, []);
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    navigate("/ShoppingCart"); // redirect after adding
+  };
 
   return (
     <div style={{ padding: "40px" }}>
@@ -75,7 +82,7 @@ const Products = () => {
             <p style={{ fontSize: "14px", color: "#666", marginBottom: "15px" }}>{product.description}</p>
 
             <button
-              onClick={() => addToCart(product)}
+              onClick={() => handleAddToCart(product)}
               style={{
                 padding: "10px 20px",
                 fontSize: "16px",
