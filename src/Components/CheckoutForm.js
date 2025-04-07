@@ -33,7 +33,7 @@ const CheckoutForm = () => {
       });
 
       const data = await res.json();
-      console.log("🟢 Received from backend:", data);
+      console.log("Received from backend:", data);
 
       if (!data.clientSecret) {
         throw new Error("clientSecret missing from backend response.");
@@ -56,7 +56,7 @@ const CheckoutForm = () => {
       }
 
       if (result.paymentIntent.status === "succeeded") {
-        console.log("✅ Payment succeeded:", result.paymentIntent.id);
+        console.log("Payment succeeded:", result.paymentIntent.id);
 
         // Step 3: Store order in Firebase
         await addDoc(collection(db, "orders"), {

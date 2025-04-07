@@ -1,72 +1,93 @@
-import React from "react";
+import { useEffect, useState, useContext } from "react";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { CartContext } from "../App";
 
-// Best Selling Watches page
 const Products = () => {
-  const watches = [
-    {
-      name: "Orbis White Arabic",
-      bracelet: "Bracelet: Silver Jubilee",
-      price: "€250",
-      image: "white arabic.png",
-    },
-    {
-      name: "Orbis Green Arabic",
-      bracelet: "Bracelet: Rose Gold Oyster",
-      price: "€320",
-      image: "green watch.png",
-    },
-    {
-      name: "Orbis Chocolate",
-      bracelet: "Bracelet: Rose Gold Oyster",
-      price: "€350",
-      image: "chocolate dial.png",
-    },
-    {
-      name: "Orbis Black Arabic",
-      bracelet: "Bracelet: Gold Jubilee",
-      price: "€280",
-      image: "black arabic.png",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const { addToCart } = useContext(CartContext);
+  const db = getFirestore();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "products"));
+        const items = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setProducts(items);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
-    <div style={{ padding: "40px", backgroundColor: "#f4f6f8", minHeight: "100vh" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "40px", fontSize: "2.5rem", color: "#333" }}>
-        Best Selling Watches
-      </h1>
+    <div style={{ padding: "40px" }}>
+      <h2 style={{ fontSize: "32px", marginBottom: "30px", textAlign: "center" }}>Shop Our Collection</h2>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
           gap: "30px",
-          maxWidth: "1200px",
-          margin: "0 auto",
         }}
       >
-        {watches.map((watch, index) => (
+        {products.map(product => (
           <div
-            key={index}
+            key={product.id}
             style={{
-              border: "none",
-              borderRadius: "12px",
-              padding: "15px",
+              border: "1px solid #ddd",
+              borderRadius: "15px",
+              padding: "20px",
               textAlign: "center",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
               backgroundColor: "#fff",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-              transition: "transform 0.3s ease",
+              transition: "transform 0.2s, box-shadow 0.2s",
+              cursor: "pointer",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            onMouseEnter={e => {
+              e.currentTarget.style.transform = "scale(1.03)";
+              e.currentTarget.style.boxShadow = "0 6px 14px rgba(0,0,0,0.15)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow = "0 4px 10px rgba(0,0,0,0.08)";
+            }}
           >
-            <img
-              src={watch.image}
-              alt={watch.name}
-              style={{ width: "100%", borderRadius: "10px", marginBottom: "15px", height: "auto" }}
-            />
-            <h3 style={{ margin: "10px 0", fontSize: "1.2rem", color: "#222" }}>{watch.name}</h3>
-            <p style={{ margin: "5px 0", color: "#666" }}>{watch.bracelet}</p>
-            <p style={{ fontWeight: "bold", color: "#111", fontSize: "1.1rem" }}>{watch.price}</p>
+            {product.image && (
+              <img
+                src={product.image}
+                alt={product.name}
+                style={{
+                  width: "100%",
+                  height: "250px",
+                  objectFit: "cover",
+                  borderRadius: "10px",
+                  marginBottom: "15px"
+                }}
+              />
+            )}
+            <h4 style={{ fontSize: "20px", margin: "10px 0" }}>{product.name}</h4>
+            <p style={{ fontSize: "18px", fontWeight: "bold", color: "#333" }}>${product.price.toFixed(2)}</p>
+            <p style={{ fontSize: "14px", color: "#666", marginBottom: "15px" }}>{product.description}</p>
+
+            <button
+              onClick={() => addToCart(product)}
+              style={{
+                padding: "10px 20px",
+                fontSize: "16px",
+                backgroundColor: "#28a745",
+                color: "#fff",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer"
+              }}
+            >
+              Add to Cart
+            </button>
           </div>
         ))}
       </div>
