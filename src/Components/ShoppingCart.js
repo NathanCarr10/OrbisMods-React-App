@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { CartContext } from "../App";
 
 const ShoppingCart = () => {
-  // State to hold items added to the cart
-  const [cartItems, setCartItems] = useState([]);
+  const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   // Sample list of products (watches)
   const products = [
@@ -11,35 +13,22 @@ const ShoppingCart = () => {
     { id: 3, name: "Orbis Watch C", price: 399.99 },
   ];
 
-  // Function to add a product to the cart
-  const addToCart = (product) => {
-    setCartItems([...cartItems, product]);
-  };
-
-  // Function to remove a product from the cart by id
-  const removeFromCart = (id) => {
-    const updatedCart = cartItems.filter(item => item.id !== id);
-    setCartItems(updatedCart);
-  };
-
   // Calculate total price of items in the cart
   const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
 
-  // Temporary checkout handler
   const handleCheckout = () => {
-    alert("Proceeding to checkout...");
-    
+    navigate("/checkout");
   };
 
   return (
     <div style={{ padding: "20px" }}>
       <h2>Welcome to Orbis Mods Store</h2>
-      
+
       {/* Product Listing */}
       <section style={{ marginBottom: "40px" }}>
         <h3>Products</h3>
         <ul>
-          {products.map(product => (
+          {products.map((product) => (
             <li key={product.id} style={{ marginBottom: "10px" }}>
               {product.name} - ${product.price.toFixed(2)}
               <button
@@ -51,7 +40,7 @@ const ShoppingCart = () => {
                   color: "#fff",
                   border: "none",
                   borderRadius: "4px",
-                  cursor: "pointer"
+                  cursor: "pointer",
                 }}
               >
                 Add to Cart
@@ -73,7 +62,7 @@ const ShoppingCart = () => {
                 <li key={index} style={{ marginBottom: "10px" }}>
                   {item.name} - ${item.price.toFixed(2)}
                   <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => removeFromCart(index)}
                     style={{
                       marginLeft: "10px",
                       padding: "5px 10px",
@@ -81,7 +70,7 @@ const ShoppingCart = () => {
                       color: "#fff",
                       border: "none",
                       borderRadius: "4px",
-                      cursor: "pointer"
+                      cursor: "pointer",
                     }}
                   >
                     Remove
@@ -101,7 +90,7 @@ const ShoppingCart = () => {
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
               Proceed to Checkout
