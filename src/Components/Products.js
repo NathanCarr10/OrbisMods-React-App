@@ -7,10 +7,11 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
-  const db = getFirestore();
 
   useEffect(() => {
     const fetchProducts = async () => {
+      const db = getFirestore();
+
       try {
         const snapshot = await getDocs(collection(db, "products"));
         const items = snapshot.docs.map(doc => ({

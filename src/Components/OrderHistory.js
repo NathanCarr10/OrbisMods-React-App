@@ -5,20 +5,20 @@ import { auth } from "../firebase";
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const db = getFirestore();
 
   useEffect(() => {
     const fetchOrders = async () => {
+      const db = getFirestore();
       const user = auth.currentUser;
 
       if (!user) {
-        console.warn("No user logged in.");
+        console.warn(" No user logged in.");
         setLoading(false);
         return;
       }
 
       try {
-        console.log("Fetching orders for UID:", user.uid);
+        console.log("🔍 Fetching orders for UID:", user.uid);
 
         const q = query(
           collection(db, "orders"),
