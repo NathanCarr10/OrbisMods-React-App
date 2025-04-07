@@ -73,7 +73,7 @@ function App() {
 
           <Route path="/Products" element={<Products />} />
 
-          {/* ✅ Stripe-wrapped ShoppingCart Route */}
+          {/* Stripe-wrapped ShoppingCart Route */}
           <Route
             path="/ShoppingCart"
             element={
@@ -92,7 +92,7 @@ function App() {
             }
           />
 
-          {/* ✅ NEW: Stripe Checkout Route */}
+          {/* Stripe Checkout Route */}
           <Route
             path="/checkout"
             element={

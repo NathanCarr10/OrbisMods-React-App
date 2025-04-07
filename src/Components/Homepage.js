@@ -1,6 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import navigate
 
 const Homepage = () => {
+  const navigate = useNavigate(); // Setup navigate
+
+  const handleExploreClick = () => {
+    navigate("/Products"); // Navigate to Products page
+  };
+
   return (
     <div style={{ display: 'flex', padding: '40px', flexWrap: 'wrap', fontFamily: 'Arial' }}>
       
@@ -13,14 +20,17 @@ const Homepage = () => {
         <h2 style={{ color: '#fdd835', fontSize: '2rem' }}>50+</h2>
         <p style={{ marginTop: '-10px', marginBottom: '20px' }}>Watch Mod Experts</p>
 
-        <button style={{
-          backgroundColor: '#fdd835',
-          border: 'none',
-          padding: '10px 20px',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          fontWeight: 'bold'
-        }}>
+        <button
+          onClick={handleExploreClick} // Attach handler
+          style={{
+            backgroundColor: '#fdd835',
+            border: 'none',
+            padding: '10px 20px',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontWeight: 'bold'
+          }}
+        >
           Explore Our Collection →
         </button>
 

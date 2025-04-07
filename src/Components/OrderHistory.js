@@ -18,7 +18,7 @@ const OrderHistory = () => {
       }
 
       try {
-        console.log("🔍 Fetching orders for UID:", user.uid);
+        console.log("Fetching orders for UID:", user.uid);
 
         const q = query(
           collection(db, "orders"),
@@ -32,7 +32,7 @@ const OrderHistory = () => {
           ...doc.data(),
         }));
 
-        console.log("📦 Orders fetched:", fetchedOrders);
+        console.log("Orders fetched:", fetchedOrders);
         setOrders(fetchedOrders);
       } catch (error) {
         console.error("Error fetching orders:", error);

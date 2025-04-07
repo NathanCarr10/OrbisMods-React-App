@@ -67,7 +67,7 @@ const CheckoutForm = () => {
         });
 
         setCartItems([]); // Clear cart
-        alert("✅ Payment successful! Order saved.");
+        alert("Payment successful! Order saved.");
         navigate("/OrderHistory"); // Redirect to order history
       } else {
         console.warn("⚠️ PaymentIntent status was not succeeded:", result.paymentIntent.status);
