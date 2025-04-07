@@ -11,11 +11,11 @@ import ShoppingCart from './Components/ShoppingCart';
 import UserAccount from './Components/UserAccount';
 import NavigationBar from './Components/NavigationBar';
 import OrderHistory from './Components/OrderHistory';
+import CheckoutPage from './Components/CheckoutPage';
 
-// ✅ Stripe Imports
+// Stripe
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -35,8 +35,12 @@ const CartProvider = ({ children }) => {
     );
   };
 
+  const setCartItemsManually = (items) => {
+    setCartItems(items);
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, setCartItems: setCartItemsManually }}>
       {children}
     </CartContext.Provider>
   );
@@ -84,6 +88,16 @@ function App() {
             element={
               <ProtectedRoute>
                 <OrderHistory />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ✅ NEW: Stripe Checkout Route */}
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <CheckoutPage />
               </ProtectedRoute>
             }
           />
