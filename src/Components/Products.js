@@ -1,24 +1,35 @@
+// React and context imports
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+
+// Firebase Firestore imports
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+
+// Global cart context import
 import { CartContext } from "../App";
 
+// Products component displays a list of available products from Firestore
 const Products = () => {
-  const [products, setProducts] = useState([]);
-  const { addToCart } = useContext(CartContext);
-  const navigate = useNavigate();
+  const [products, setProducts] = useState([]); // State to store fetched products
+  const { addToCart } = useContext(CartContext); // Access addToCart from context
+  const navigate = useNavigate(); // For redirecting after add-to-cart
 
+  // Fetch products on component mount
   useEffect(() => {
     const fetchProducts = async () => {
-      const db = getFirestore();
+      const db = getFirestore(); // Get Firestore instance
 
       try {
+        // Get all documents from "products" collection
         const snapshot = await getDocs(collection(db, "products"));
+
+        // Map Firestore docs into usable product objects
         const items = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }));
-        setProducts(items);
+
+        setProducts(items); // Update state with product list
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -27,15 +38,20 @@ const Products = () => {
     fetchProducts();
   }, []);
 
+  // Handle adding a product to the cart and redirect to shopping cart page
   const handleAddToCart = (product) => {
     addToCart(product);
-    navigate("/ShoppingCart"); // redirect after adding
+    navigate("/ShoppingCart"); // Redirect user after adding to cart
   };
 
   return (
     <div style={{ padding: "40px" }}>
-      <h2 style={{ fontSize: "32px", marginBottom: "30px", textAlign: "center" }}>Shop Our Collection</h2>
+      {/* Page heading */}
+      <h2 style={{ fontSize: "32px", marginBottom: "30px", textAlign: "center" }}>
+        Shop Our Collection
+      </h2>
 
+      {/* Grid layout for displaying product cards */}
       <div
         style={{
           display: "grid",
@@ -56,6 +72,7 @@ const Products = () => {
               transition: "transform 0.2s, box-shadow 0.2s",
               cursor: "pointer",
             }}
+            // Hover effects for product cards
             onMouseEnter={e => {
               e.currentTarget.style.transform = "scale(1.03)";
               e.currentTarget.style.boxShadow = "0 6px 14px rgba(0,0,0,0.15)";
@@ -65,6 +82,7 @@ const Products = () => {
               e.currentTarget.style.boxShadow = "0 4px 10px rgba(0,0,0,0.08)";
             }}
           >
+            {/* Product image */}
             {product.image && (
               <img
                 src={product.image}
@@ -78,10 +96,23 @@ const Products = () => {
                 }}
               />
             )}
-            <h4 style={{ fontSize: "20px", margin: "10px 0" }}>{product.name}</h4>
-            <p style={{ fontSize: "18px", fontWeight: "bold", color: "#333" }}>${product.price.toFixed(2)}</p>
-            <p style={{ fontSize: "14px", color: "#666", marginBottom: "15px" }}>{product.description}</p>
 
+            {/* Product name */}
+            <h4 style={{ fontSize: "20px", margin: "10px 0" }}>
+              {product.name}
+            </h4>
+
+            {/* Product price */}
+            <p style={{ fontSize: "18px", fontWeight: "bold", color: "#333" }}>
+              ${product.price.toFixed(2)}
+            </p>
+
+            {/* Product description */}
+            <p style={{ fontSize: "14px", color: "#666", marginBottom: "15px" }}>
+              {product.description}
+            </p>
+
+            {/* Add to Cart button */}
             <button
               onClick={() => handleAddToCart(product)}
               style={{
