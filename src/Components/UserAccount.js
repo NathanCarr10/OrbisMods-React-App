@@ -4,6 +4,7 @@ import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom"; // Import navigation hook
 
 const UserAccount = () => {
   // Track the authenticated user
@@ -20,39 +21,39 @@ const UserAccount = () => {
   });
 
   const db = getFirestore(); // Initialize Firestore
+  const navigate = useNavigate(); // Initialize navigate hook
 
   // Fetch user auth state and profile data from Firestore
-useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-    setUser(currentUser); // Set authenticated user
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser); // Set authenticated user
 
-    if (currentUser) {
-      const userRef = doc(db, "users", currentUser.uid);
-      const userSnap = await getDoc(userRef);
+      if (currentUser) {
+        const userRef = doc(db, "users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
 
-      if (userSnap.exists()) {
-        // Profile exists — populate form
-        setProfile(userSnap.data());
-      } else {
-        // No profile exists — create one with default fields
-        const defaultProfile = {
-          fullName: "",
-          phone: "",
-          address: "",
-          city: "",
-          postcode: "",
-          country: "",
-        };
-        await setDoc(userRef, defaultProfile); // Create new user document
-        setProfile(defaultProfile); // Set state with default
-        toast.info("Welcome! Your profile has been initialized.");
+        if (userSnap.exists()) {
+          // Profile exists — populate form
+          setProfile(userSnap.data());
+        } else {
+          // No profile exists — create one with default fields
+          const defaultProfile = {
+            fullName: "",
+            phone: "",
+            address: "",
+            city: "",
+            postcode: "",
+            country: "",
+          };
+          await setDoc(userRef, defaultProfile); // Create new user document
+          setProfile(defaultProfile); // Set state with default
+          toast.info("Welcome! Your profile has been initialized.");
+        }
       }
-    }
-  });
+    });
 
-  return () => unsubscribe(); // Clean up auth listener
-}, [db]);
-;
+    return () => unsubscribe(); // Clean up auth listener
+  }, [db]);
 
   // Update profile state when form fields change
   const handleChange = (e) => {
@@ -66,6 +67,7 @@ useEffect(() => {
     try {
       await setDoc(doc(db, "users", user.uid), profile, { merge: true }); // Merge with existing user doc
       toast.success("Profile updated!"); // Show success toast
+      navigate("/ProfileSummary"); // Redirect to Profile Summary
     } catch (error) {
       console.error("Error saving profile:", error);
       toast.error("Failed to save profile."); // Show error toast
