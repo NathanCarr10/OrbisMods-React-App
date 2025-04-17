@@ -162,9 +162,9 @@ function App() {
           <Route
             path="/ProfileSummary"
             element={
-            <ProtectedRoute>
-              <ProfileSummary />
-            </ProtectedRoute>
+              <ProtectedRoute>
+                <ProfileSummary />
+              </ProtectedRoute>
             }
           />
 
