@@ -30,6 +30,7 @@ function NavigationBar() {
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/Products">Products</Nav.Link>
             <Nav.Link as={Link} to="/ShoppingCart">Shopping Cart</Nav.Link>
+            <Nav.Link as={Link} to="/About">About</Nav.Link>
           </Nav>
 
           {/* Right-aligned navigation links */}
