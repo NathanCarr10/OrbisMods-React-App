@@ -1,73 +1,143 @@
-// React imports
+// React and Firebase imports
 import { useEffect, useState } from "react";
-
-// Firebase authentication imports
 import { auth } from "../firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
 
-// React Router imports for navigation and linking
-import { Link, useNavigate } from "react-router-dom";
-
-// UserAccount component displays account info for the currently authenticated user
 const UserAccount = () => {
-  const [user, setUser] = useState(null); // State to store the logged-in user
-  const navigate = useNavigate(); // Hook to programmatically navigate between pages
+  // Track the authenticated user
+  const [user, setUser] = useState(null);
 
-  // UseEffect to listen for auth state changes (login/logout)
+  // Track editable profile fields
+  const [profile, setProfile] = useState({
+    fullName: "",
+    phone: "",
+    address: "",
+    city: "",
+    postcode: "",
+    country: "",
+  });
+
+  const db = getFirestore(); // Initialize Firestore
+
+  // Fetch user auth state and profile data from Firestore
   useEffect(() => {
-    // Subscribe to auth state changes
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // Update state when user changes
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser); // Set user if authenticated
+
+      // Load profile data from Firestore
+      if (currentUser) {
+        const userRef = doc(db, "users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          setProfile(userSnap.data()); // Populate form with stored data
+        }
+      }
     });
 
-    // Cleanup subscription on component unmount
-    return () => unsubscribe();
-  }, []);
+    return () => unsubscribe(); // Clean up listener
+  }, [db]);
 
-  // Logout function to sign the user out and redirect to login
-  const handleLogout = async () => {
+  // Update profile state when form fields change
+  const handleChange = (e) => {
+    setProfile({ ...profile, [e.target.name]: e.target.value });
+  };
+
+  // Save updated profile to Firestore
+  const handleSave = async () => {
+    if (!user) return;
+
     try {
-      await signOut(auth); // Firebase sign-out
-      navigate("/LoginPage"); // Redirect to login page after logout
+      const userRef = doc(db, "users", user.uid);
+      await setDoc(userRef, profile, { merge: true }); // Merge with existing data
+      toast.success("Profile updated!"); // Show success toast
     } catch (error) {
-      console.error("Logout Error:", error);
+      console.error("Error saving profile:", error);
+      toast.error("Failed to save profile."); // Show error toast
     }
   };
 
+  // Render login prompt if user not authenticated
+  if (!user) {
+    return <p style={{ padding: "20px" }}>You are not logged in.</p>;
+  }
+
+  // Render profile form
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>User Account</h2>
+    <div style={{ padding: "40px", maxWidth: "600px", margin: "0 auto" }}>
+      <h2>My Account</h2>
 
-      {/* If user is logged in, display their info */}
-      {user ? (
-        <div>
-          <p><strong>Name:</strong> {user.displayName || "Not Provided"}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>User ID:</strong> {user.uid}</p>
+      <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
+        {/* Email (read-only) */}
+        <input value={user.email} disabled />
 
-          {/* Link to order history page */}
-          <Link to="/OrderHistory">View Order History</Link>
+        {/* Editable profile fields */}
+        <input
+          type="text"
+          name="fullName"
+          placeholder="Full Name"
+          value={profile.fullName}
+          onChange={handleChange}
+        />
 
-          <br /><br />
+        <input
+          type="tel"
+          name="phone"
+          placeholder="Phone Number"
+          value={profile.phone}
+          onChange={handleChange}
+        />
 
-          {/* Logout button */}
-          <button
-            onClick={handleLogout}
-            style={{
-              background: "red",
-              color: "white",
-              padding: "10px",
-              border: "none",
-              cursor: "pointer"
-            }}
-          >
-            Logout
-          </button>
-        </div>
-      ) : (
-        // If no user is logged in, show message with login link
-        <p>You are not logged in. <Link to="/LoginPage">Login here</Link></p>
-      )}
+        <input
+          type="text"
+          name="address"
+          placeholder="Street Address"
+          value={profile.address}
+          onChange={handleChange}
+        />
+
+        <input
+          type="text"
+          name="city"
+          placeholder="City"
+          value={profile.city}
+          onChange={handleChange}
+        />
+
+        <input
+          type="text"
+          name="postcode"
+          placeholder="Postcode"
+          value={profile.postcode}
+          onChange={handleChange}
+        />
+
+        <input
+          type="text"
+          name="country"
+          placeholder="Country"
+          value={profile.country}
+          onChange={handleChange}
+        />
+
+        {/* Save button */}
+        <button
+          onClick={handleSave}
+          style={{
+            marginTop: "10px",
+            padding: "10px",
+            backgroundColor: "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Save Profile
+        </button>
+      </div>
     </div>
   );
 };
