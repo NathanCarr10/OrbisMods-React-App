@@ -101,10 +101,21 @@ const OrderHistory = () => {
               <ul style={{ marginTop: "10px" }}>
                 {order.items.map((item, index) => (
                   <li key={index}>
-                    {item.name} – ${item.price.toFixed(2)}
+                    {item.name} – ${item.price.toFixed(2)} (Qty: {item.quantity || 1})
                   </li>
                 ))}
               </ul>
+
+              {/* Display shipping info if available */}
+              {order.shippingInfo && (
+                <div style={{ marginTop: "15px", fontSize: "14px", color: "#555" }}>
+                  <strong>Shipping Information:</strong>
+                  <p>{order.shippingInfo.fullName}</p>
+                  <p>{order.shippingInfo.address}, {order.shippingInfo.city}</p>
+                  <p>{order.shippingInfo.postcode}, {order.shippingInfo.country}</p>
+                  <p>Phone: {order.shippingInfo.phone}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>

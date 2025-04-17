@@ -50,8 +50,7 @@ const UserAccount = () => {
     if (!user) return;
 
     try {
-      const userRef = doc(db, "users", user.uid);
-      await setDoc(userRef, profile, { merge: true }); // Merge with existing data
+      await setDoc(doc(db, "users", user.uid), profile, { merge: true }); // Merge with existing user doc
       toast.success("Profile updated!"); // Show success toast
     } catch (error) {
       console.error("Error saving profile:", error);
