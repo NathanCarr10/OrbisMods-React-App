@@ -22,23 +22,37 @@ const UserAccount = () => {
   const db = getFirestore(); // Initialize Firestore
 
   // Fetch user auth state and profile data from Firestore
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser); // Set user if authenticated
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    setUser(currentUser); // Set authenticated user
 
-      // Load profile data from Firestore
-      if (currentUser) {
-        const userRef = doc(db, "users", currentUser.uid);
-        const userSnap = await getDoc(userRef);
+    if (currentUser) {
+      const userRef = doc(db, "users", currentUser.uid);
+      const userSnap = await getDoc(userRef);
 
-        if (userSnap.exists()) {
-          setProfile(userSnap.data()); // Populate form with stored data
-        }
+      if (userSnap.exists()) {
+        // Profile exists — populate form
+        setProfile(userSnap.data());
+      } else {
+        // No profile exists — create one with default fields
+        const defaultProfile = {
+          fullName: "",
+          phone: "",
+          address: "",
+          city: "",
+          postcode: "",
+          country: "",
+        };
+        await setDoc(userRef, defaultProfile); // Create new user document
+        setProfile(defaultProfile); // Set state with default
+        toast.info("Welcome! Your profile has been initialized.");
       }
-    });
+    }
+  });
 
-    return () => unsubscribe(); // Clean up listener
-  }, [db]);
+  return () => unsubscribe(); // Clean up auth listener
+}, [db]);
+;
 
   // Update profile state when form fields change
   const handleChange = (e) => {
