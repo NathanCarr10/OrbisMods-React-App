@@ -4,7 +4,7 @@ import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom"; // Import navigation hook
+import { useNavigate } from "react-router-dom"; // Navigation hook
 
 const UserAccount = () => {
   // Track the authenticated user
@@ -137,7 +137,7 @@ const UserAccount = () => {
           onChange={handleChange}
         />
 
-        {/* Save button */}
+        {/* Save Profile Button */}
         <button
           onClick={handleSave}
           style={{
@@ -151,6 +151,22 @@ const UserAccount = () => {
           }}
         >
           Save Profile
+        </button>
+
+        {/* Navigate to Order History Button */}
+        <button
+          onClick={() => navigate("/OrderHistory")}
+          style={{
+            marginTop: "10px",
+            padding: "10px",
+            backgroundColor: "#28a745",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          View Order History
         </button>
       </div>
     </div>

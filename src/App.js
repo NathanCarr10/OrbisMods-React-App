@@ -15,6 +15,8 @@ import NavigationBar from './Components/NavigationBar';
 import OrderHistory from './Components/OrderHistory';
 import CheckoutPage from './Components/CheckoutPage';
 import AboutPage from "./Components/AboutPage";
+import ProfileSummary from "./Components/ProfileSummary";
+
 
 // Stripe integration
 import { Elements } from '@stripe/react-stripe-js';
@@ -157,6 +159,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/ProfileSummary"
+            element={
+            <ProtectedRoute>
+              <ProfileSummary />
+            </ProtectedRoute>
+            }
+          />
+
         </Routes>
 
         {/* Toast notifications container */}
