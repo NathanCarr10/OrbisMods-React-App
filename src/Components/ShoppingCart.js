@@ -7,14 +7,22 @@ import { CartContext } from "../App";
 
 // ShoppingCart component displays items in the user's cart
 const ShoppingCart = () => {
-  // Access cart items and remove function from context
-  const { cartItems, removeFromCart } = useContext(CartContext);
+  // Access cart context functions and data
+  const {
+    cartItems,
+    removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
+  } = useContext(CartContext);
 
   // Initialize navigation function to redirect to checkout
   const navigate = useNavigate();
 
-  // Calculate total cart value
-  const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
+  // Calculate total cart value with quantities
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
   // Redirect user to checkout page
   const handleCheckout = () => {
@@ -60,12 +68,41 @@ const ShoppingCart = () => {
                   />
                 )}
 
-                {/* Display product details */}
+                {/* Display product details and quantity controls */}
                 <div style={{ flexGrow: 1 }}>
                   <h4 style={{ margin: 0 }}>{item.name}</h4>
                   <p style={{ margin: "8px 0", fontWeight: "bold" }}>
                     ${item.price.toFixed(2)}
                   </p>
+
+                  {/* Quantity controls */}
+                  <div>
+                    <button
+                      onClick={() => decreaseQuantity(item.id)}
+                      style={{
+                        padding: "5px 10px",
+                        marginRight: "10px",
+                        fontSize: "14px",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      −
+                    </button>
+                    <span>{item.quantity}</span>
+                    <button
+                      onClick={() => increaseQuantity(item.id)}
+                      style={{
+                        padding: "5px 10px",
+                        marginLeft: "10px",
+                        fontSize: "14px",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
 
                 {/* Button to remove item from cart */}

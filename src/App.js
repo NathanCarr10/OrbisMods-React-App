@@ -22,22 +22,53 @@ import { loadStripe } from '@stripe/stripe-js';
 // Load Stripe public key from .env file
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-
 // Global Cart Context
 export const CartContext = createContext(); // Create context for cart state
 
 const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]); // State to store cart items
 
-  // Add a product to the cart
+  // Add a product to the cart (with quantity logic)
   const addToCart = (product) => {
-    setCartItems((prevItems) => [...prevItems, product]);
+    setCartItems((prevItems) => {
+      const existing = prevItems.find(item => item.id === product.id);
+      if (existing) {
+        // If item exists, increase its quantity
+        return prevItems.map(item =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      // Add new item with quantity 1
+      return [...prevItems, { ...product, quantity: 1 }];
+    });
   };
 
-  // Remove a product from the cart by index
+  // Remove item from cart by index
   const removeFromCart = (indexToRemove) => {
     setCartItems((prevItems) =>
       prevItems.filter((_, index) => index !== indexToRemove)
+    );
+  };
+
+  // Increase item quantity by ID
+  const increaseQuantity = (id) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+
+  // Decrease item quantity by ID, remove if it hits 0
+  const decreaseQuantity = (id) => {
+    setCartItems((prev) =>
+      prev
+        .map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+        )
+        .filter((item) => item.quantity > 0)
     );
   };
 
@@ -48,20 +79,25 @@ const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, setCartItems: setCartItemsManually }}
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        increaseQuantity,
+        decreaseQuantity,
+        setCartItems: setCartItemsManually,
+      }}
     >
       {children}
     </CartContext.Provider>
   );
 };
 
-
 // Route Protection Component
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth(); // Check if user is authenticated
   return user ? children : <Navigate to="/LoginPage" />; // Redirect if not logged in
 };
-
 
 // Main App Component
 function App() {
