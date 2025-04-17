@@ -12,6 +12,9 @@ import { auth } from "../firebase";
 // Cart context
 import { CartContext } from "../App";
 
+// Toastify for notifications
+import { toast } from "react-toastify";
+
 const CheckoutForm = () => {
   // Initialize Stripe and Elements hooks
   const stripe = useStripe();
@@ -66,6 +69,7 @@ const CheckoutForm = () => {
       if (result.error) {
         console.error("Stripe error:", result.error.message);
         setError(result.error.message);
+        toast.error("Payment failed: " + result.error.message); // Show toast error
         setProcessing(false);
         return;
       }
@@ -83,18 +87,20 @@ const CheckoutForm = () => {
 
         // Clear cart and redirect
         setCartItems([]);
-        alert("Payment successful! Order saved.");
+        toast.success("Payment successful! Order saved."); // Show toast success
         navigate("/OrderHistory");
       } else {
         // Handle any other payment status
         console.warn("PaymentIntent status was not succeeded:", result.paymentIntent.status);
         setError("Payment was not successful. Please try again.");
+        toast.error("Payment was not successful. Please try again."); // Show toast error
         setProcessing(false);
       }
     } catch (err) {
       // General error handler
       console.error("Checkout error:", err.message);
       setError(err.message || "Something went wrong. Please try again.");
+      toast.error("Checkout failed: " + err.message); // Show toast error
       setProcessing(false);
     }
   };

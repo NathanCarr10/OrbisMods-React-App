@@ -8,6 +8,9 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 // Global cart context import
 import { CartContext } from "../App";
 
+// Toastify import for notifications
+import { toast } from "react-toastify";
+
 // Products component displays a list of available products from Firestore
 const Products = () => {
   const [products, setProducts] = useState([]); // State to store fetched products
@@ -40,7 +43,8 @@ const Products = () => {
 
   // Handle adding a product to the cart and redirect to shopping cart page
   const handleAddToCart = (product) => {
-    addToCart(product);
+    addToCart(product); // Add product to global cart state
+    toast.success(`${product.name} added to cart!`); // Show success notification
     navigate("/ShoppingCart"); // Redirect user after adding to cart
   };
 

@@ -8,6 +8,9 @@ import { auth, googleProvider } from "../firebase";
 // React Router hook for navigation after signup
 import { useNavigate } from "react-router-dom";
 
+// Toastify for user notifications
+import { toast } from "react-toastify";
+
 // Signup component handles new user registration
 const Signup = () => {
   // State to store form input and error messages
@@ -23,10 +26,12 @@ const Signup = () => {
     try {
       // Create new user account in Firebase Auth
       await createUserWithEmailAndPassword(auth, email, password);
+      toast.success("Account created successfully!"); // Show success toast
       navigate("/UserAccount"); // Redirect to user account page after signup
     } catch (err) {
       // Display any signup error
       setError(err.message);
+      toast.error("Signup failed: " + err.message); // Show error toast
     }
   };
 
@@ -35,10 +40,12 @@ const Signup = () => {
     try {
       // Trigger Google sign-in popup and register user
       await signInWithPopup(auth, googleProvider);
+      toast.success("Signed up with Google!"); // Show success toast
       navigate("/UserAccount"); // Redirect to user account page after signup
     } catch (err) {
       // Display any Google signup error
       setError(err.message);
+      toast.error("Google signup failed: " + err.message); // Show error toast
     }
   };
 

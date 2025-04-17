@@ -19,6 +19,10 @@ import CheckoutPage from './Components/CheckoutPage';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
+// Toastify for user notifications
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // Load Stripe public key from .env file
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -152,6 +156,9 @@ function App() {
             }
           />
         </Routes>
+
+        {/* Toast notifications container */}
+        <ToastContainer position="top-right" autoClose={3000} />
       </Router>
     </CartProvider>
   );
