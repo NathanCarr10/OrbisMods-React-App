@@ -14,6 +14,7 @@ import UserAccount from './Components/UserAccount';
 import NavigationBar from './Components/NavigationBar';
 import OrderHistory from './Components/OrderHistory';
 import CheckoutPage from './Components/CheckoutPage';
+import AboutPage from "./Components/AboutPage";
 
 // Stripe integration
 import { Elements } from '@stripe/react-stripe-js';
@@ -115,6 +116,7 @@ function App() {
           <Route path="/LoginPage" element={<Login />} />
           <Route path="/Signup" element={<Signup />} />
           <Route path="/Products" element={<Products />} />
+          <Route path="/About" element={<AboutPage />} />
 
           {/* Protected route for user account */}
           <Route
