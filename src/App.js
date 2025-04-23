@@ -16,6 +16,7 @@ import OrderHistory from './Components/OrderHistory';
 import CheckoutPage from './Components/CheckoutPage';
 import AboutPage from "./Components/AboutPage";
 import ProfileSummary from "./Components/ProfileSummary";
+import ThankYou from "./Components/ThankYou";
 
 
 // Stripe integration
@@ -119,6 +120,7 @@ function App() {
           <Route path="/Signup" element={<Signup />} />
           <Route path="/Products" element={<Products />} />
           <Route path="/About" element={<AboutPage />} />
+          <Route path="/ThankYou" element={<ThankYou />} />
 
           {/* Protected route for user account */}
           <Route
