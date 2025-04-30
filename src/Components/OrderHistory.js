@@ -94,14 +94,14 @@ const OrderHistory = () => {
               }}
             >
               <h4>Order ID: {order.id}</h4>
-              <p><strong>Total:</strong> ${order.amount.toFixed(2)}</p>
+              <p><strong>Total:</strong> €{order.amount.toFixed(2)}</p>
               <p><strong>Date:</strong> {order.timestamp?.toDate().toLocaleString()}</p>
 
               {/* List all items within this order */}
               <ul style={{ marginTop: "10px" }}>
                 {order.items.map((item, index) => (
                   <li key={index}>
-                    {item.name} – ${item.price.toFixed(2)} (Qty: {item.quantity || 1})
+                    {item.name} – €{item.price.toFixed(2)} (Qty: {item.quantity || 1})
                   </li>
                 ))}
               </ul>

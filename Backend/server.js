@@ -34,8 +34,8 @@ app.post("/create-payment-intent", async (req, res) => {
 
     // Create a PaymentIntent with Stripe
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(totalAmount * 100), // Convert dollars to cents
-      currency: "usd",
+      amount: Math.round(totalAmount * 100), // Convert eruos to cents
+      currency: "eur",
       automatic_payment_methods: { enabled: true }, // Enable support for Google/Apple Pay
     });
 

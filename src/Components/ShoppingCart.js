@@ -72,7 +72,7 @@ const ShoppingCart = () => {
                 <div style={{ flexGrow: 1 }}>
                   <h4 style={{ margin: 0 }}>{item.name}</h4>
                   <p style={{ margin: "8px 0", fontWeight: "bold" }}>
-                    ${item.price.toFixed(2)}
+                    €{item.price.toFixed(2)}
                   </p>
 
                   {/* Quantity controls */}
@@ -125,7 +125,7 @@ const ShoppingCart = () => {
 
           {/* Display total price */}
           <h4 style={{ marginTop: "30px" }}>
-            Total: ${totalPrice.toFixed(2)}
+            Total: €{totalPrice.toFixed(2)}
           </h4>
 
           {/* Button to proceed to checkout */}

@@ -108,7 +108,7 @@ const Products = () => {
 
             {/* Product price */}
             <p style={{ fontSize: "18px", fontWeight: "bold", color: "#333" }}>
-              ${product.price.toFixed(2)}
+              €{product.price.toFixed(2)}
             </p>
 
             {/* Product description */}
