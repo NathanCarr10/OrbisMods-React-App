@@ -1,70 +1,108 @@
-# Getting Started with Create React App
+# ⌚ Orbis Mods – Custom Watch E-Commerce Web App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack e-commerce web application for Orbis Mods, a fictional watch modification brand, where users can browse Seiko mod parts, add them to a cart, and securely place orders using Stripe. Built with **React**, **Firebase**, and **Stripe**.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Features
 
-### `npm start`
+- 🔐 **User Authentication** (Email/Password + Google login via Firebase Auth)
+- 🛍️ **Products Page** — Display watch mod components fetched from Firestore
+- 🛒 **Shopping Cart** — Add/remove items, quantity adjustment, and cart summary
+- 💳 **Checkout & Payments** — Stripe integration for secure payments
+- 📦 **Order History** — View all past purchases (user-specific)
+- 📬 **User Profile** — Store shipping info (name, address, phone, etc.)
+- 📧 **Order Confirmation Emails** — Automatically sent using MailerSend & Firebase Functions
+- ✅ **Thank You Page** — Confirmation after a successful order
+- 🔐 **Protected Routes** — Only logged-in users can access checkout or profile pages
+- ⚙️ **Admin Ready** — Orders can be viewed from Firestore or extended with an admin dashboard
+- 🔔 **Toast Notifications** — User-friendly alerts for login, payment, etc.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Tech Stack
 
-### `npm test`
+| Frontend          | Backend / DB       | Payments     | Email Service   |
+|-------------------|--------------------|--------------|-----------------|
+| React             | Firebase Firestore | Stripe       | MailerSend      |
+| React Router DOM  | Firebase Auth      | Node.js (API) | Firebase Functions |
+| React Bootstrap   | Firebase Hosting   |              |                 |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 📦 Setup Instructions
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 🔧 Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Node.js & npm installed
+- Firebase CLI: `npm install -g firebase-tools`
+- A Firebase project (Firestore, Authentication, Hosting, and Functions enabled)
+- Stripe account + MailerSend account
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+### 🚨 Firebase Configuration
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Create a `.env` file in the root:
+   ```env
+   REACT_APP_STRIPE_PUBLIC_KEY=your_stripe_public_key
+2. Configure Firebase with your credentials inside /src/firebase.js
+3. Set MailerSend API key: firebase functions:config:set mailersend.key="YOUR_MAILERSEND_API_KEY"
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 📦 Install & Run
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+npm install
+npm start
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+To deploy:
+firebase deploy --only hosting
 
-## Learn More
+To deploy functions:
+firebase deploy --only functions
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 📁 Folder Structure
+├── public/
+├── src/
+│   ├── Components/
+│   │   ├── Products.js
+│   │   ├── ShoppingCart.js
+│   │   ├── CheckoutForm.js
+│   │   ├── OrderHistory.js
+│   │   ├── UserAccount.js
+│   │   └── ...
+│   ├── firebase.js
+│   ├── App.js
+│   └── index.js
+├── functions/
+│   └── index.js (email confirmation logic)
+├── .env
+├── firebase.json
+└── README.md
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 📸 Screenshots
+Home Page:
+![Orbis HomePage](https://github.com/user-attachments/assets/ca8bf2c9-536e-4d1f-8791-a1ed018222bb)
 
-### Code Splitting
+Products Page:
+![Orbis Products Page](https://github.com/user-attachments/assets/25d5042e-4bdf-456a-97fb-57821c4cf90a)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Shopping Cart:
+![Orbis ShoppingCart](https://github.com/user-attachments/assets/fbe220c3-66c9-4b5b-8b13-e7cce012d009)
 
-### Analyzing the Bundle Size
+Checkout Page:
+![Orbis Checkout](https://github.com/user-attachments/assets/6eafbd4a-29d3-40b8-87ab-719d6bf240cb)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+My Account Page:
+![Orbis MyAccount](https://github.com/user-attachments/assets/7d532a9a-9c07-4533-a222-d61f0f23251c)
 
-### Making a Progressive Web App
+Order History Page:
+![Orbis OrderHistory](https://github.com/user-attachments/assets/0d24002c-3f7e-44dc-a0a2-102a14386a75)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### 🙋‍♂️ Author
+Nathan Carr
+3rd Year Project — Atlantic Technological University
+Email: nathancarr18@gmail.com
 
-### Advanced Configuration
+### 📝 License
+This project is for educational purposes only. All product images and branding used are for demonstration.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
